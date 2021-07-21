@@ -2,15 +2,19 @@ const { json } = require('express')
 const express = require('express')
 const mongoose = require('mongoose')
 const Post = require('./models/Post.js')
+require('dotenv').config()
 
 const app = express()
+app.use(express.json())
 
-mongoose.connect("mongodb://localhost:27017/post", {
+const connectionUrl = process.env.REACT_APP_DATABASE_URL
+
+mongoose.connect(connectionUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false
 })
-    .then(() => console.log('connected to mongodb'))
+    .then(() => console.log(`connected to mongoDB`))
     .catch(err => console.log(err))
 
 app.get("/posts", function (req, res) {
@@ -26,6 +30,8 @@ app.get("/posts", function (req, res) {
 })
 
 app.post("/posts", function (req, res) {
+    console.log("*************** logging the req *******************")
+    console.log(req)
     const { id, title, body } = req.body
 
     const post = new Post({
@@ -91,5 +97,5 @@ app.delete("/posts/:postId", (req, res) => {
 })
 
 const PORT = 3000
-app.use(json())
+
 app.listen(PORT, () => console.log('programa iniciou'))
