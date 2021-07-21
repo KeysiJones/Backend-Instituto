@@ -30,8 +30,7 @@ app.get("/posts", function (req, res) {
 })
 
 app.post("/posts", function (req, res) {
-    console.log("*************** logging the req *******************")
-    console.log(req)
+
     const { id, title, body } = req.body
 
     const post = new Post({
