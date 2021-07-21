@@ -17,6 +17,10 @@ mongoose.connect(connectionUrl, {
     .then(() => console.log(`connected to mongoDB`))
     .catch(err => console.log(err))
 
+app.get("/", function (req, res) {
+    res.status(200).json({ mensagem: "Seja bem vindo meu amigo(a)" })
+})
+
 app.get("/posts", function (req, res) {
     Post.find(function (err, posts) {
         if (err) {
@@ -69,21 +73,21 @@ app.put("/posts/:postId", function (req, res) {
 
     const { title } = req.body
 
-    Post.findOneAndUpdate({ id: postId }, {title: title}, function(err, post) {
+    Post.findOneAndUpdate({ id: postId }, { title: title }, function (err, post) {
         if (err) {
             return res.status(500).json({ erro: err.message })
         }
 
-        return res.status(200).json({msg: 'Título do post atualizado !'})
+        return res.status(200).json({ msg: 'Título do post atualizado !' })
     })
 })
 
 app.delete("/posts/:postId", (req, res) => {
-    
+
     const postId = req.params.postId
-    
-    Post.deleteOne({id: postId}, function(err, post) {
-        if(err) {
+
+    Post.deleteOne({ id: postId }, function (err, post) {
+        if (err) {
             return res.status(500).json({ erro: err.message })
         }
 
@@ -91,7 +95,7 @@ app.delete("/posts/:postId", (req, res) => {
             return res.status('404').json({ msg: 'Post não encontrado !' })
         }
 
-        return res.status(200).json({msg: 'Post deletado com sucesso'})
+        return res.status(200).json({ msg: 'Post deletado com sucesso' })
     })
 })
 
