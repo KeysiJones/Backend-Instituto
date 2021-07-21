@@ -2,6 +2,7 @@ const { json } = require('express')
 const express = require('express')
 const mongoose = require('mongoose')
 const Post = require('./models/Post.js')
+const PORT = process.env.PORT || 3000
 require('dotenv').config()
 
 const app = express()
@@ -98,7 +99,5 @@ app.delete("/posts/:postId", (req, res) => {
         return res.status(200).json({ msg: 'Post deletado com sucesso' })
     })
 })
-
-const PORT = 3000
 
 app.listen(PORT, () => console.log('programa iniciou'))
