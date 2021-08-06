@@ -16,12 +16,13 @@ app.use(cors(corsOptions));
 
 const connectionUrl = process.env.REACT_APP_DATABASE_URL;
 
-function getNextSequenceValue(sequenceName) {
-  return Counter.findOneAndUpdate(
+async function getNextSequenceValue(sequenceName) {
+  const sequenceDocument = await Counter.findOneAndUpdate(
     { _id: sequenceName },
     { $inc: { sequence_value: 1 } },
     { new: true, upsert: true }
-  ).then((sequenceDocument) => sequenceDocument.sequence_value);
+  );
+  return sequenceDocument.sequence_value;
 }
 
 mongoose.Promise = global.Promise;
