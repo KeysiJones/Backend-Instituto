@@ -1,5 +1,5 @@
 var corsOptions = {
-  origin: "https://keysijones-blog.vercel.app",
+  origin: process.env.ALLOWED_ORIGIN,
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 

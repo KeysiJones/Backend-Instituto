@@ -1,7 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const Post = require("./models/Post.js");
-const corsOptions = require("./config/corsOptions.js");
 const Counter = require("./models/Counter");
 const PORT = process.env.PORT || 3001;
 const cors = require("cors");
@@ -10,6 +9,9 @@ require("dotenv").config();
 
 const app = express();
 app.use(express.json());
+
+const corsOptions = require("./config/corsOptions.js");
+
 app.use(cors(corsOptions));
 
 const connectionUrl = process.env.REACT_APP_DATABASE_URL;
