@@ -1,17 +1,20 @@
-const { json } = require("express");
 const express = require("express");
 const mongoose = require("mongoose");
 const Post = require("./models/Post.js");
 const Counter = require("./models/Counter");
 const PORT = process.env.PORT || 3001;
 const cors = require("cors");
-const { db } = require("./models/Post.js");
 
 require("dotenv").config();
 
+var corsOptions = {
+  origin: "https://keysijones-blog.vercel.app",
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 
 const connectionUrl = process.env.REACT_APP_DATABASE_URL;
 
