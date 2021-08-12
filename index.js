@@ -175,7 +175,7 @@ app.post("/register", async (req, res) => {
       { user_id: user._id, username: username },
       process.env.TOKEN_KEY,
       {
-        expiresIn: "2h",
+        expiresIn: "1d",
       }
     );
     // save user token
@@ -206,7 +206,7 @@ app.post("/login", async (req, res) => {
     if (user && (await bcrypt.compare(password, user.password))) {
       // Create token
       const token = jwt.sign({ user_id: user._id }, process.env.TOKEN_KEY, {
-        expiresIn: "2h",
+        expiresIn: "1d",
       });
 
       // save user token
