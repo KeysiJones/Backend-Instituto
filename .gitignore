@@ -1,2 +1,3 @@
 config/corsOptions.js
 .env
+node_modules
