@@ -67,8 +67,6 @@ app.get("/counters", auth, function (req, res) {
 });
 
 app.post("/cadastrar-cursos", function (req, res) {
-  //console.log(req.body);
-
   const { terca, quarta, quinta, sabado } = req.body;
 
   const aula = new Aula({
@@ -87,21 +85,21 @@ app.post("/cadastrar-cursos", function (req, res) {
   });
 });
 
-// app.get("/post/:postId", function (req, res) {
-//   const postId = req.params.postId;
+app.get("/aulas/:aulasId", function (req, res) {
+  const aulasId = req.params.aulasId;
 
-//   Post.findOne({ id: postId }, function (err, post) {
-//     if (err) {
-//       return res.status(500).json({ erro: err.message });
-//     }
+  Aula.findOne({ _id: aulasId }, function (err, aulas) {
+    if (err) {
+      return res.status(500).json({ erro: err.message });
+    }
 
-//     if (post == null) {
-//       return res.status("404").json({ msg: "Post não encontrado !" });
-//     }
+    if (aulas == null) {
+      return res.status("404").json({ msg: "Aulas não encontradas !" });
+    }
 
-//     return res.status(200).json(post);
-//   });
-// });
+    return res.status(200).json(aulas);
+  });
+});
 
 // app.put("/post/:postId", auth, function (req, res) {
 //   const postId = req.params.postId;
