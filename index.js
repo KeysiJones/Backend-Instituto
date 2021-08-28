@@ -101,25 +101,38 @@ app.get("/aulas/:aulasId", function (req, res) {
   });
 });
 
-// app.put("/post/:postId", auth, function (req, res) {
-//   const postId = req.params.postId;
+app.put("/aulas/:aulasId", auth, function (req, res) {
+  const aulasId = req.params.aulasId;
 
-//   const { title, subtitle, body } = req.body;
+  Aula.findOne({ _id: aulasId }, function (err, aulas) {
+    if (err) {
+      return res.status(500).json({ erro: err.message });
+    }
 
-//   Post.findOneAndUpdate(
-//     { id: postId },
-//     { title, subtitle, body },
-//     function (err, post) {
-//       if (err) {
-//         return res.status(500).json({ erro: err.message });
-//       }
+    if (aulas == null) {
+      return res.status("404").json({ msg: "Aulas não encontradas !" });
+    }
 
-//       return res.status(200).json({
-//         msg: `Título do post com id ${postId} atualizado com sucesso!`,
-//       });
-//     }
-//   );
-// });
+    const { terca, quarta, quinta, sabado } = req.body;
+
+    Aula.findOneAndUpdate(
+      { _id: aulasId },
+      {
+        terca: terca ?? aulas.terca,
+        quarta: quarta ?? aulas.quarta,
+        quinta: quinta ?? aulas.quinta,
+        sabado: sabado ?? aulas.sabado,
+      },
+      function (err, aulas) {
+        if (err) {
+          return res.status(500).json({ erro: err.message });
+        }
+
+        return res.status(200).json({ msg: "Aulas atualizadas com sucesso !" });
+      }
+    );
+  });
+});
 
 // app.delete("/post/:postId", auth, (req, res) => {
 //   const postId = req.params.postId;
