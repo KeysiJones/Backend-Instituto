@@ -66,7 +66,7 @@ app.get("/counters", auth, function (req, res) {
   });
 });
 
-app.post("/cadastrar-cursos", function (req, res) {
+app.post("/cadastrar-cursos", auth, function (req, res) {
   const { terca, quarta, quinta, sabado } = req.body;
 
   const aula = new Aula({
@@ -134,6 +134,8 @@ app.put("/aulas/:aulasId", auth, function (req, res) {
   });
 });
 
+/* *************************************** COMENTADO MAS CONTINUA FUNCIONANDO ********************************************** */
+
 // app.delete("/post/:postId", auth, (req, res) => {
 //   const postId = req.params.postId;
 
@@ -153,52 +155,52 @@ app.put("/aulas/:aulasId", auth, function (req, res) {
 // Register
 // ...
 
-app.post("/register", async (req, res) => {
-  // Our register logic starts here
-  try {
-    // Get user input
-    const { username, password } = req.body;
+// app.post("/register", async (req, res) => {
+//   // Our register logic starts here
+//   try {
+//     // Get user input
+//     const { username, password } = req.body;
 
-    // Validate user input
-    if (!(password && username)) {
-      res.status(400).send("All input is required");
-    }
+//     // Validate user input
+//     if (!(password && username)) {
+//       res.status(400).send("All input is required");
+//     }
 
-    // check if user already exist
-    // Validate if user exist in our database
-    const oldUser = await User.findOne({ username });
+//     // check if user already exist
+//     // Validate if user exist in our database
+//     const oldUser = await User.findOne({ username });
 
-    if (oldUser) {
-      return res.status(409).send("User Already Exist. Please Login");
-    }
+//     if (oldUser) {
+//       return res.status(409).send("User Already Exist. Please Login");
+//     }
 
-    //Encrypt user password
-    encryptedPassword = await bcrypt.hash(password, 10);
+//     //Encrypt user password
+//     encryptedPassword = await bcrypt.hash(password, 10);
 
-    // Create user in our database
-    const user = await User.create({
-      username: username,
-      password: encryptedPassword,
-    });
+//     // Create user in our database
+//     const user = await User.create({
+//       username: username,
+//       password: encryptedPassword,
+//     });
 
-    // Create token
-    const token = jwt.sign(
-      { user_id: user._id, username: username },
-      process.env.TOKEN_KEY,
-      {
-        expiresIn: "1d",
-      }
-    );
-    // save user token
-    user.token = token;
+//     // Create token
+//     const token = jwt.sign(
+//       { user_id: user._id, username: username },
+//       process.env.TOKEN_KEY,
+//       {
+//         expiresIn: "1d",
+//       }
+//     );
+//     // save user token
+//     user.token = token;
 
-    // return new user
-    res.status(201).json(user);
-  } catch (err) {
-    console.log(err);
-  }
-  // Our register logic ends here
-});
+//     // return new user
+//     res.status(201).json(user);
+//   } catch (err) {
+//     console.log(err);
+//   }
+//   // Our register logic ends here
+// });
 
 // Login
 app.post("/login", async (req, res) => {
@@ -224,8 +226,11 @@ app.post("/login", async (req, res) => {
       user.token = token;
 
       // user
-      res.status(200).json(user);
+      res.status(200).json({
+        msg: "Login realizado com sucesso",
+      });
     }
+
     res.status(400).send("Invalid Credentials");
   } catch (err) {
     console.log(err);
