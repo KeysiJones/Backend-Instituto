@@ -102,36 +102,29 @@ app.get("/aulas/:aulasId", function (req, res) {
 });
 
 app.put("/aulas/:aulasId", auth, function (req, res) {
-  const aulasId = req.params.aulasId;
+  const { diaSemana, novasAulas } = req.body;
+  const opcao = `${diaSemana}.id`;
+  const link = `${diaSemana}.$.link`;
+  const nome = `${diaSemana}.$.nome`;
+  const horario = `${diaSemana}.$.horario`;
 
-  Aula.findOne({ _id: aulasId }, function (err, aulas) {
-    if (err) {
-      return res.status(500).json({ erro: err.message });
-    }
-
-    if (aulas == null) {
-      return res.status("404").json({ msg: "Aulas não encontradas !" });
-    }
-
-    const { terca, quarta, quinta, sabado } = req.body;
-
-    Aula.findOneAndUpdate(
-      { _id: aulasId },
-      {
-        terca: terca ?? aulas.terca,
-        quarta: quarta ?? aulas.quarta,
-        quinta: quinta ?? aulas.quinta,
-        sabado: sabado ?? aulas.sabado,
+  Aula.updateOne(
+    { _id: req.params.aulasId, [opcao]: novasAulas.id },
+    {
+      $set: {
+        [link]: novasAulas.link,
+        [nome]: novasAulas.nome,
+        [horario]: novasAulas.horario,
       },
-      function (err, aulas) {
-        if (err) {
-          return res.status(500).json({ erro: err.message });
-        }
-
-        return res.status(200).json({ msg: "Aulas atualizadas com sucesso !" });
+    },
+    function (err, aula) {
+      if (err) {
+        return res.status(500).json({ erro: err.message });
       }
-    );
-  });
+
+      return res.status(200).json(aula);
+    }
+  );
 });
 
 /* *************************************** COMENTADO MAS CONTINUA FUNCIONANDO ********************************************** */
@@ -224,14 +217,13 @@ app.post("/login", async (req, res) => {
 
       // save user token
       user.token = token;
+      const message = "Login realizado com sucesso";
 
-      // user
-      res.status(200).json({
-        msg: "Login realizado com sucesso",
-      });
+      const status = 200;
+      res.status(status).json({ status, token, message });
     }
 
-    res.status(400).send("Invalid Credentials");
+    res.status(400).send({ message: "Usuário e/ou senha inválidos" });
   } catch (err) {
     console.log(err);
   }
