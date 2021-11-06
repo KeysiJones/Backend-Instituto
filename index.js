@@ -20,8 +20,7 @@ const corsOptions = require("./config/corsOptions.js");
 
 app.use(cors(corsOptions));
 
-const connectionUrl =
-  process.env.REACT_APP_DATABASE_URL || "mongodb://localhost:27017/node";
+const connectionUrl = "mongodb://localhost:27017/node";
 
 mongoose.Promise = global.Promise;
 
@@ -83,6 +82,31 @@ app.post("/cadastrar-cursos", auth, function (req, res) {
 
     res.status(200).json(aulas);
   });
+});
+
+app.put("/novasAulas/:aulasId", auth, function (req, res) {
+  const { diaSemana, novaAula } = req.body;
+
+  generateSequence("postId")
+    .then((generatedSequence) => {
+      novaAula.id = generatedSequence;
+      Aula.updateOne(
+        { _id: req.params.aulasId },
+        {
+          $push: {
+            [diaSemana]: novaAula,
+          },
+        },
+        function (err, aula) {
+          if (err) {
+            return res.status(500).json({ erro: err.message });
+          }
+
+          return res.status(200).json(aula);
+        }
+      );
+    })
+    .catch((error) => console.log(error));
 });
 
 app.get("/aulas/:aulasId", function (req, res) {
