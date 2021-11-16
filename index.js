@@ -20,7 +20,8 @@ const corsOptions = require("./config/corsOptions.js");
 
 app.use(cors(corsOptions));
 
-const connectionUrl = "mongodb://localhost:27017/node";
+const connectionUrl =
+  process.env.REACT_APP_DATABASE_URL || "mongodb://localhost:27017/node";
 
 mongoose.Promise = global.Promise;
 
