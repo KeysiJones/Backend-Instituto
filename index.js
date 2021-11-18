@@ -111,7 +111,7 @@ app.post("/novasAulas/:aulasId", auth, function (req, res) {
 });
 
 app.delete("/novasAulas/:aulasId", auth, function (req, res) {
-  const { diaSemana, novaAula } = req.body;
+  const { diaSemana, aula } = req.body;
 
   generateSequence("postId")
     .then(() => {
@@ -120,7 +120,7 @@ app.delete("/novasAulas/:aulasId", auth, function (req, res) {
         {
           $pull: {
             [diaSemana]: {
-              id: novaAula.id,
+              id: aula.id,
             },
           },
         },
