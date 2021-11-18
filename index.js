@@ -113,7 +113,6 @@ app.post("/novasAulas/:aulasId", auth, function (req, res) {
 app.delete("/novasAulas/:aulasId", auth, function (req, res) {
   const { diaSemana, novaAula } = req.body;
 
-  const tery = `${diaSemana}.$`;
   generateSequence("postId")
     .then(() => {
       Aula.findByIdAndUpdate(
