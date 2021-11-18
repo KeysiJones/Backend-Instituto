@@ -85,7 +85,7 @@ app.post("/cadastrar-cursos", auth, function (req, res) {
   });
 });
 
-app.put("/novasAulas/:aulasId", auth, function (req, res) {
+app.post("/novasAulas/:aulasId", auth, function (req, res) {
   const { diaSemana, novaAula } = req.body;
 
   generateSequence("postId")
@@ -97,6 +97,36 @@ app.put("/novasAulas/:aulasId", auth, function (req, res) {
           $push: {
             [diaSemana]: novaAula,
           },
+        },
+        function (err, aula) {
+          if (err) {
+            return res.status(500).json({ erro: err.message });
+          }
+
+          return res.status(200).json(aula);
+        }
+      );
+    })
+    .catch((error) => console.log(error));
+});
+
+app.delete("/novasAulas/:aulasId", auth, function (req, res) {
+  const { diaSemana, novaAula } = req.body;
+
+  const tery = `${diaSemana}.$`;
+  generateSequence("postId")
+    .then(() => {
+      Aula.findByIdAndUpdate(
+        { _id: req.params.aulasId },
+        {
+          $pull: {
+            [diaSemana]: {
+              id: novaAula.id,
+            },
+          },
+        },
+        {
+          multi: true,
         },
         function (err, aula) {
           if (err) {
